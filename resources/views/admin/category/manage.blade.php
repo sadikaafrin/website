@@ -27,12 +27,10 @@
                         <tbody>
                             @foreach($categories as $category)
                             <tr>
-                                {{-- <td>{{ ($products->currentPage() - 1) * $products->perPage() + $loop->iteration }}</td> --}}
                                <th>{{$loop->iteration}}</th>
                                 <td>{{$category->name}}</td>
                                 <td>{{$category->description}}</td>
                                 <td>
-                                    {{-- <img src="{{ asset('/') }}/uploads/categories/{{$category->image }}" alt="" height="100px" width="100px"> --}}
                                     <img src="{{ asset('uploads/categories/' . $category->image) }}" alt="" height="100px" width="100px">
 
                                 </td>
@@ -118,6 +116,43 @@
     });
 </script>
 <script>
+
+// $(document).ready(function(){
+//             var table = $('.yajra-datatable').DataTable({
+//                 processing: true,
+//                 serverSide: true,
+//                 ajax: "{{ route('category.new') }}",
+//                 columns: [
+//                     {
+//                         data: 'sl',
+//                         name: 'sl',
+//                         className: 'text-center',
+//                         searchable: true,
+//                         orderable: true
+//                     },
+//                     {
+//                         data: 'category_name',
+//                         name: 'category_name',
+//                         className: 'text-left',
+//                         searchable: true,
+//                         orderable: true
+//                     },
+//                     {
+//                         data: 'image',
+//                         name: 'image',
+//                         className: 'text-center',
+//                         orderable: false
+//                     },
+//                     {
+//                         data: 'action',
+//                         name: 'action',
+//                         className: 'text-center',
+//                         orderable: false
+//                     }
+//                 ]
+//             });
+//         });
+
     $(document).ready(function () {
     $(document).on('click','.add_category', function (e) {
         e.preventDefault();
@@ -200,6 +235,7 @@
     formData.append('name', up_name);
     formData.append('description', up_description);
     formData.append('image', up_image);
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
 
     $.ajax({
         url:"{{route('category.update')}}",
@@ -209,7 +245,7 @@
         processData: false,
         success:function (res) {
             if(res.status=='success'){
-                $('#updateModal').modal('hide');
+                $('#updatedModal').modal('hide');
                 $('#updateCategoryForm')[0].reset();
                 $('.table').load(location.href+' .table');
                 Command: toastr["success"]("Category update", "success")

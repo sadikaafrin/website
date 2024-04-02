@@ -159,6 +159,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Yajra\DataTables\DataTablesServiceProvider::class,
         Darryldecode\Cart\CartServiceProvider::class,
         /*
          * Application Service Providers...
