@@ -9,46 +9,45 @@ use Yajra\DataTables\Facades\DataTables;
 class CategoryController extends Controller
 {
 
-    public function manage()
+    public function manage(Request $request)
     {
-        // if (request()->ajax()) {
-        //     $data = Category::orderBy('id', 'DESC');
+        if ($request->ajax()) {
+            $data = Category::latest()->get();
 
-        //     $dataCollection = $data;
-        //     return DataTables::of($dataCollection)
-        //         ->addColumn('sl', function ($row) {
-        //             return $this->dt_index($row);
-        //         })
-        //         ->addColumn('name', function ($row) {
-        //             return $row->name;
-        //         })
-        //         ->addColumn('description', function ($row) {
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<a href="javascript:void(0);" class="edit btn btn-success btn-sm">Edit</a>
+                     <a href="javascript:void(0);" class="delete btn btn-danger btn-sm">Delete</a>';
+                    return $actionBtn;
+                })
+                ->addColumn('name', function ($row) {
+                    return $row->name;
+                })
+                ->addColumn('description', function ($row) {
 
-        //             return $row->description;
-        //         })
-        //         ->addColumn('image', function ($row) {
-        //             if($row->image != null){
-        //                 $img = asset('uploads/categories/'.$row->image);
-        //             }
-        //             else{
-        //                 $img = asset('uploads/categories/'.$row->image);
-        //             }
-        //             $html = '<div class="text-center" uk-lightbox><a href="'.$img.'">
-        //                 <img style="width: 70px; border: 1px solid #ddd; border-radius: 4px; padding: 1px;" src="'. $img .'" alt="">
-        //             </a></div>';
-        //             return $html;
-        //         })
-        //         ->addColumn('action', function ($row) {
-        //             $btn1 = '<button onclick="edit('.$row->id.');" type="button" class="btn btn-sm btn-primary mr-2"><i class="fas fa-edit"></i></button>';
-        //             $btn2 = '<button onclick="destroy('. $row->id .')" type="button" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i></button>';
-        //             return $btn1.$btn2;
-        //         })
-        //         ->rawColumns(['action', 'image', 'sl'])
-        //         ->make(true);
-        // }
+                    return $row->description;
+                })
+                ->addColumn('image', function ($row) {
+                    if($row->image != null){
+                        $img = asset('uploads/categories/'.$row->image);
+                    }
+                    else{
+                        $img = asset('uploads/categories/'.$row->image);
+                    }
+                    $html = '<div class="text-center" uk-lightbox><a href="'.$img.'">
+                        <img style="width: 70px; border: 1px solid #ddd; border-radius: 4px; padding: 1px;" src="'. $img .'" alt="">
+                    </a></div>';
+                    return $html;
+                })
+                ->rawColumns(['action', 'name', 'description', 'image'])
+                ->make(true);
+        }
 
-        $categories = Category::all();
-        return view('admin.category.manage', compact('categories'));
+        // $categories = Category::all();
+        // return view('admin.category.manage', compact('categories'));
+        return view('admin.category.manage');
+
     }
 
     public function create(Request $request)

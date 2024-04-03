@@ -13,8 +13,7 @@
                     </a>
                 </div>
                 <div class="card-body">
-
-                    <table id="datatable" class="table table-bordered dt-responsive  nowrap w-100">
+                    <table  class="table table-bordered dt-responsive yajra-datatable nowrap w-100">
                         <thead>
                             <tr>
                                 <th class="border-bottom-0">Sl NO.</th>
@@ -24,7 +23,7 @@
                                 <th class="border-bottom-0">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {{-- <tbody>
                             @foreach($categories as $category)
                             <tr>
                                <th>{{$loop->iteration}}</th>
@@ -56,7 +55,7 @@
                                 </td>
                             </tr>
                             @endforeach
-                        </tbody>
+                        </tbody> --}}
                     </table>
 
                 </div>
@@ -117,41 +116,50 @@
 </script>
 <script>
 
-// $(document).ready(function(){
-//             var table = $('.yajra-datatable').DataTable({
-//                 processing: true,
-//                 serverSide: true,
-//                 ajax: "{{ route('category.new') }}",
-//                 columns: [
-//                     {
-//                         data: 'sl',
-//                         name: 'sl',
-//                         className: 'text-center',
-//                         searchable: true,
-//                         orderable: true
-//                     },
-//                     {
-//                         data: 'category_name',
-//                         name: 'category_name',
-//                         className: 'text-left',
-//                         searchable: true,
-//                         orderable: true
-//                     },
-//                     {
-//                         data: 'image',
-//                         name: 'image',
-//                         className: 'text-center',
-//                         orderable: false
-//                     },
-//                     {
-//                         data: 'action',
-//                         name: 'action',
-//                         className: 'text-center',
-//                         orderable: false
-//                     }
-//                 ]
-//             });
-//         });
+$(document).ready(function(){
+            var table = $('.yajra-datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                url: "{{ url()->current() }}",
+                    data: function(d) {
+                    },
+                columns: [
+                    {
+                        data: 'sl',
+                        name: 'sl',
+                        className: 'text-center',
+                        searchable: true,
+                        orderable: true
+                    },
+                    {
+                        data: 'name',
+                        name: 'name',
+                        className: 'text-left',
+                        searchable: true,
+                        orderable: true
+                    },
+                    {
+                        data: 'description',
+                        name: 'description',
+                        className: 'text-left',
+                        searchable: true,
+                        orderable: true
+                    },
+                    {
+                        data: 'image',
+                        name: 'image',
+                        className: 'text-center',
+                        orderable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        className: 'text-center',
+                        orderable: false
+                    }
+                ]
+            });
+        });
 
     $(document).ready(function () {
     $(document).on('click','.add_category', function (e) {
