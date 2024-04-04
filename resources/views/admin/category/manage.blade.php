@@ -15,14 +15,9 @@
                 <div class="card-body">
                     <table id="category-table"  class="table table-bordered dt-responsive nowrap w-100 DataTable">
                         <thead>
-                            {{-- <tr>
-                                <th class="border-bottom-0">Sl NO.</th>
-                                <th class="border-bottom-0">Category Name</th>
-                                <th class="border-bottom-0">Category Description</th>
-                                <th class="border-bottom-0">Category Image</th>
-                                <th class="border-bottom-0">Action</th>
-                            </tr> --}}
+
                             <tr>
+                                <th class="border-bottom-0">sl</th>
                                 <th class="border-bottom-0">Category Name</th>
                                 <th class="border-bottom-0">Category Description</th>
                                 <th class="border-bottom-0">Category Image</th>
@@ -136,6 +131,7 @@ $(document).ready(function(){
         },
 
         columns: [
+            {data: 'sl', name: 'sl'},
             {data: 'name', name: 'name'},
             {data: 'description', name: 'description'},
             {
@@ -221,10 +217,8 @@ $(document).ready(function(){
     },
 
 });
-
-
-
 });
+
 
     //    Update Category
     $(document).on('click','.update_category', function (e) {
@@ -240,9 +234,9 @@ $(document).ready(function(){
     formData.append('description', up_description);
     formData.append('image', up_image);
     formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
-    var url = '{{ route('category.update', ':id') }}';
-            url = url.replace(':id', up_id);
+
     $.ajax({
+
         method:'post',
         data:formData,
         contentType: false,

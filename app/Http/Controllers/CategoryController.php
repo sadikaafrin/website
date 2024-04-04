@@ -14,9 +14,11 @@ class CategoryController extends Controller
         if($request->ajax()){
             $categories = Category::latest()->select('*');
             return DataTables::of($categories)
-                ->addIndexColumn()
-
-
+            ->addColumn('sl', function ($row) {
+                static $sl = 0;
+                $sl++;
+                return $sl;
+            })
 
                 ->addColumn('action', function ($row) {
                     $btn = "";
@@ -26,14 +28,11 @@ class CategoryController extends Controller
                     $btn .= ' <a href="#" class="btn btn-danger btn-sm delete_category action-button" data-id="' . $row->id . '"><i class="fa fa-trash"></i></a>';
                     return $btn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['sl', 'action'])
                 ->make(true);
     }
-    // return view('categories.index');
 
-        // $categories = Category::all();
         return view('admin.category.manage');
-        // return view('admin.category.manage');
 
     }
 
@@ -81,7 +80,7 @@ class CategoryController extends Controller
 
         $request->validate([
 
-            // 'id' => ['required'],
+            'id' => ['required'],
             'name' => ['required', 'min: 3', 'max:80'],
             'description' => ['nullable'],
             'image' => ['nullable'],
