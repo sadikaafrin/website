@@ -11,42 +11,29 @@ class CategoryController extends Controller
 
     public function manage(Request $request)
     {
-        if ($request->ajax()) {
-            $data = Category::latest()->get();
-
-            return DataTables::of($data)
+        if($request->ajax()){
+            $categories = Category::latest()->select('*');
+            return DataTables::of($categories)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="javascript:void(0);" class="edit btn btn-success btn-sm">Edit</a>
-                     <a href="javascript:void(0);" class="delete btn btn-danger btn-sm">Delete</a>';
-                    return $actionBtn;
-                })
-                ->addColumn('name', function ($row) {
-                    return $row->name;
-                })
-                ->addColumn('description', function ($row) {
 
-                    return $row->description;
+
+
+                ->addColumn('action', function ($row) {
+                    $btn = "";
+                    $btn .= '&nbsp;';
+                    $btn .= ' <a href="#" data-id="' . $row->id . '" class="btn btn-primary btn-sm action-button update_category_form"><i class="fa fa-edit"></i></a>';
+                    $btn .= '&nbsp;';
+                    $btn .= ' <a href="#" class="btn btn-danger btn-sm delete_category action-button" data-id="' . $row->id . '"><i class="fa fa-trash"></i></a>';
+                    return $btn;
                 })
-                ->addColumn('image', function ($row) {
-                    if($row->image != null){
-                        $img = asset('uploads/categories/'.$row->image);
-                    }
-                    else{
-                        $img = asset('uploads/categories/'.$row->image);
-                    }
-                    $html = '<div class="text-center" uk-lightbox><a href="'.$img.'">
-                        <img style="width: 70px; border: 1px solid #ddd; border-radius: 4px; padding: 1px;" src="'. $img .'" alt="">
-                    </a></div>';
-                    return $html;
-                })
-                ->rawColumns(['action', 'name', 'description', 'image'])
+                ->rawColumns(['action'])
                 ->make(true);
-        }
+    }
+    // return view('categories.index');
 
         // $categories = Category::all();
-        // return view('admin.category.manage', compact('categories'));
         return view('admin.category.manage');
+        // return view('admin.category.manage');
 
     }
 
@@ -77,8 +64,6 @@ class CategoryController extends Controller
             $category->image = $imageName;
         }
 
-
-
         $category->save();
 
         return response()->json([
@@ -86,16 +71,23 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function updateCategory(Request $request)
+    public function editCategory($id){
+        $category = Category::findOrFail($id);
+        return response()->json($category);
+    }
+
+    public function updateCategory(Request $request, $id)
     {
 
         $request->validate([
-            'name' => 'required|unique:categories,name,'.$request->id,
-            'description' => 'required',
-            // 'image' => 'nullable|image',
+
+            // 'id' => ['required'],
+            'name' => ['required', 'min: 3', 'max:80'],
+            'description' => ['nullable'],
+            'image' => ['nullable'],
         ]);
 
-        $category =Category::find($request->id);
+        $category =Category::findOrFail($id);
 
         $category->name = $request->name;
         $category->description = $request->description;
@@ -114,6 +106,7 @@ class CategoryController extends Controller
            'status' => 'success',
         ]);
     }
+
 
 
     public function deleteCategory(Request $request)

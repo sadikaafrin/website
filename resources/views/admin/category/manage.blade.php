@@ -13,10 +13,16 @@
                     </a>
                 </div>
                 <div class="card-body">
-                    <table  class="table table-bordered dt-responsive yajra-datatable nowrap w-100">
+                    <table id="category-table"  class="table table-bordered dt-responsive nowrap w-100 DataTable">
                         <thead>
-                            <tr>
+                            {{-- <tr>
                                 <th class="border-bottom-0">Sl NO.</th>
+                                <th class="border-bottom-0">Category Name</th>
+                                <th class="border-bottom-0">Category Description</th>
+                                <th class="border-bottom-0">Category Image</th>
+                                <th class="border-bottom-0">Action</th>
+                            </tr> --}}
+                            <tr>
                                 <th class="border-bottom-0">Category Name</th>
                                 <th class="border-bottom-0">Category Description</th>
                                 <th class="border-bottom-0">Category Image</th>
@@ -117,48 +123,31 @@
 <script>
 
 $(document).ready(function(){
-            var table = $('.yajra-datatable').DataTable({
-                processing: true,
-                serverSide: true,
-                url: "{{ url()->current() }}",
-                    data: function(d) {
-                    },
-                columns: [
-                    {
-                        data: 'sl',
-                        name: 'sl',
-                        className: 'text-center',
-                        searchable: true,
-                        orderable: true
-                    },
-                    {
-                        data: 'name',
-                        name: 'name',
-                        className: 'text-left',
-                        searchable: true,
-                        orderable: true
-                    },
-                    {
-                        data: 'description',
-                        name: 'description',
-                        className: 'text-left',
-                        searchable: true,
-                        orderable: true
-                    },
-                    {
-                        data: 'image',
-                        name: 'image',
-                        className: 'text-center',
-                        orderable: false
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        className: 'text-center',
-                        orderable: false
-                    }
-                ]
-            });
+    var base_url = "{{route('category.manage')}}";
+    var categoryTable = $('#category-table').DataTable({
+        searching: true,
+        processing: true,
+        serverSide: true,
+        ordering: false,
+        responsive: true,
+        stateSave: true,
+        ajax: {
+          url: base_url,
+        },
+
+        columns: [
+            {data: 'name', name: 'name'},
+            {data: 'description', name: 'description'},
+            {
+            data: 'image',
+            name: 'image',
+            render: function(data, type, full, meta) {
+                return '<img src="{{ asset('uploads/categories/') }}/' + data + '" alt="Category Image" height="100px" width="100px">';
+            }
+        },
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
         });
 
     $(document).ready(function () {
@@ -185,10 +174,10 @@ $(document).ready(function(){
             processData: false,
             success: function (res) {
                 if (res.status == 'success') {
-                    $('#addModal').modal('hide');
-                    $('#addCategoryForm')[0].reset();
-                    $('.table').load(location.href + ' .table');
-                    toastr.success("Category added successfully", "Success");
+                $('#addModal').modal('hide');
+                $('#addCategoryForm')[0].reset();
+                toastr.success("Category added successfully", "Success");
+                $('.DataTable').DataTable().ajax.reload();
                 }
             },
 
@@ -213,20 +202,27 @@ $(document).ready(function(){
     });
 // Show Category
     $(document).on('click', '.update_category_form', function () {
-    let id = $(this).data('id');
-    let name = $(this).data('name');
-    let description = $(this).data('description');
-    let image = $(this).data('image');
-    // console.log(image);
+     $('#updatedModal').modal('show');
+     let id = $(this).data('id');
+     var main_url = "{{url('/')}}";
+     var ajax_url = "{{url('/edit-category')}}/"+id;
+    $.ajax({
 
-    $('#up_id').val(id);
-    $('#up_name').val(name);
-    $('#up_description').val(description);
+   url: ajax_url,
+   type:"GET",
+   dataType:"json",
+
+    success:function(data) {
+        console.log(data);
+        $('#up_name').val(data.name);
+        $('#up_description').val(data.description);
+        $('#current_image').attr('src',main_url+"/uploads/categories/"+data.image);
+
+    },
+
+});
 
 
-
-    $('#current_image').attr("src", "{{ asset('uploads/categories/') }}/" + image);
-    $('#updatedModal').modal('show');
 
 });
 
@@ -244,37 +240,22 @@ $(document).ready(function(){
     formData.append('description', up_description);
     formData.append('image', up_image);
     formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
-
+    var url = '{{ route('category.update', ':id') }}';
+            url = url.replace(':id', up_id);
     $.ajax({
-        url:"{{route('category.update')}}",
         method:'post',
         data:formData,
         contentType: false,
         processData: false,
+        url: url,
         success:function (res) {
             if(res.status=='success'){
                 $('#updatedModal').modal('hide');
                 $('#updateCategoryForm')[0].reset();
-                $('.table').load(location.href+' .table');
-                Command: toastr["success"]("Category update", "success")
 
-                toastr.options = {
-                    "closeButton": false,
-                    "debug": false,
-                    "newestOnTop": false,
-                    "progressBar": true,
-                    "positionClass": "toast-top-right",
-                    "preventDuplicates": false,
-                    "onclick": null,
-                    "showDuration": "300",
-                    "hideDuration": "1000",
-                    "timeOut": "5000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
-                }
+                Command: toastr["success"]("Category update", "success")
+                $('.DataTable').DataTable().ajax.reload();
+
             }
         },
 
@@ -282,8 +263,9 @@ $(document).ready(function(){
 });
 
 
+
   //    Delete Category
-  $(document).on('click','.delete_product', function (e) {
+  $(document).on('click','.delete_category', function (e) {
             e.preventDefault();
             let category_id = $(this).data('id');
             if(confirm('Are you sure to delete this ?')){
@@ -292,28 +274,12 @@ $(document).ready(function(){
                     method:'post',
                     data:{category_id:category_id},
                     success:function (res) {
-                        if(res.status=='success'){
-                            $('.table').load(location.href+' .table');
-                            Command: toastr["success"]("Category Deleted successfully", "success")
-
-                            toastr.options = {
-                                "closeButton": false,
-                                "debug": false,
-                                "newestOnTop": false,
-                                "progressBar": true,
-                                "positionClass": "toast-top-right",
-                                "preventDuplicates": false,
-                                "onclick": null,
-                                "showDuration": "300",
-                                "hideDuration": "1000",
-                                "timeOut": "5000",
-                                "extendedTimeOut": "1000",
-                                "showEasing": "swing",
-                                "hideEasing": "linear",
-                                "showMethod": "fadeIn",
-                                "hideMethod": "fadeOut"
-                            }
+                        if (res.status == 'success') {
+                        toastr.success("Category Deleted successfully", "success");
+                        $('.DataTable').DataTable().ajax.reload();
                         }
+
+
                     }
                 });
             }

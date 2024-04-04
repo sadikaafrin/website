@@ -1,7 +1,4 @@
 
-
-
-
     <div class="modal fade" id="updatedModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
         <form action="" id="updateCategoryForm" method="post" enctype="multipart/form-data"  >
             @csrf
@@ -35,7 +32,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary update_category" >Update Category</button>
+                        <button type="submit" id="update_category" class="btn btn-primary update_category" >Update Category</button>
                     </div>
                 </div>
             </div>
