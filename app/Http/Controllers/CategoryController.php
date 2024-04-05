@@ -80,7 +80,7 @@ class CategoryController extends Controller
 
         $request->validate([
 
-            'id' => ['required'],
+            // 'id' => ['required'],
             'name' => ['required', 'min: 3', 'max:80'],
             'description' => ['nullable'],
             'image' => ['nullable'],
