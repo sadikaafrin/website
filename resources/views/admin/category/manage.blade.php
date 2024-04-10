@@ -126,6 +126,11 @@ $(document).ready(function(){
         ordering: false,
         responsive: true,
         stateSave: true,
+       lengthMenu: [
+            [5, 10, 25, 50, -1],
+            [5, 10, 25, 50, 'All']
+        ],
+        PageLength:5,
         ajax: {
           url: base_url,
         },
@@ -134,7 +139,9 @@ $(document).ready(function(){
             {data: 'sl', name: 'sl'},
             {data: 'name', name: 'name'},
             {data: 'description', name: 'description'},
-            {data: 'image', name: 'image',
+            {
+            data: 'image',
+            name: 'image',
             render: function(data, type, full, meta) {
                 return '<img src="{{ asset('uploads/categories/') }}/' + data + '" alt="Category Image" height="100px" width="100px">';
             }
@@ -145,7 +152,6 @@ $(document).ready(function(){
         });
 
     $(document).ready(function () {
-
     $(document).on('click','.add_category', function (e) {
         e.preventDefault();
         let name = $('#name').val();
@@ -208,11 +214,12 @@ $(document).ready(function(){
    dataType:"json",
 
     success:function(data) {
-        console.log(data)
+        console.log(data);
         $('#up_id').val(data.id);
         $('#up_name').val(data.name);
         $('#up_description').val(data.description);
         $('#current_image').attr('src',main_url+"/uploads/categories/"+data.image);
+
     },
 
 });
@@ -221,37 +228,39 @@ $(document).ready(function(){
 
     //    Update Category
     $(document).on('click','.update_category', function (e) {
-        e.preventDefault();
-        let up_id = $('#up_id').val();
-        let up_name = $('#up_name').val();
-        let up_description = $('#up_description').val();
-        let up_image = $('#up_image')[0].files[0];
+    e.preventDefault();
+    let up_id = $('#up_id').val();
+    let up_name = $('#up_name').val();
+    let up_description = $('#up_description').val();
+    let up_image = $('#up_image')[0].files[0];
 
-        let formData = new FormData();
-        formData.append('id', up_id);
-        formData.append('name', up_name);
-        formData.append('description', up_description);
-        formData.append('image', up_image);
-        formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+    let formData = new FormData();
+    formData.append('id', up_id);
+    formData.append('name', up_name);
+    formData.append('description', up_description);
+    formData.append('image', up_image);
+    formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
 
-        $.ajax({
-            method:'post',
-            data:formData,
-            contentType: false,
-            processData: false,
-            // url: url,
-            url: "{{url('/update-category')}}/"+up_id,
-            success:function (res) {
-                if(res.status=='success'){
-                    $('#updatedModal').modal('hide');
-                    $('#updateCategoryForm')[0].reset();
+    $.ajax({
 
-                    Command: toastr["success"]("Category update", "success")
-                    $('.DataTable').DataTable().ajax.reload();
+        method:'post',
+        data:formData,
+        contentType: false,
+        processData: false,
+        // url: url,
+        url: "{{url('/update-category')}}/"+up_id,
+        success:function (res) {
+            if(res.status=='success'){
+                $('#updatedModal').modal('hide');
+                $('#updateCategoryForm')[0].reset();
 
-                }
-            },
-        });
+                Command: toastr["success"]("Category update", "success")
+                $('.DataTable').DataTable().ajax.reload();
+
+            }
+        },
+
+    });
 });
 
 
@@ -281,3 +290,10 @@ $(document).ready(function(){
 </script>
 
 @endpush
+
+
+
+
+
+
+

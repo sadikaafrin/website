@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+// use Illuminate\Pagination\Paginator;
 
 class CategoryController extends Controller
 {
@@ -13,6 +14,7 @@ class CategoryController extends Controller
     {
         if($request->ajax()){
             $categories = Category::latest()->select('*');
+            // $categories = Category::orderBy('id', 'DESc');
             return DataTables::of($categories)
             ->addColumn('sl', function ($row) {
                 static $sl = 0;
@@ -35,6 +37,7 @@ class CategoryController extends Controller
         return view('admin.category.manage');
 
     }
+
 
     public function create(Request $request)
     {

@@ -35,9 +35,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
     Route::get('/manage-category', [CategoryController::class, 'manage'])->name('category.manage');
     Route::post('/new-category', [CategoryController::class, 'create'])->name('category.new');
-    // Route::post('/edit-category', [CategoryController::class, 'edit'])->name('category.edit');
     Route::get('/edit-category/{id}',  [CategoryController::class, 'editCategory'])->name('category.edit');
-    // Route::post('/update-category', [CategoryController::class, 'updateCategory'])->name('category.update');
     Route::post('/update-category/{id}', [CategoryController::class, 'updateCategory'])->name('category.update');
     Route::post('/delete-category', [CategoryController::class, 'deleteCategory'])->name('category.delete');
 
@@ -59,7 +57,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/manage-brand', [BrandController::class, 'manage'])->name('brand.manage');
     Route::get('/edit-brand/{id}', [BrandController::class, 'edit'])->name('brand.edit');
     Route::post('/update-brand/{id}', [BrandController::class, 'update'])->name('brand.update');
-    Route::get('/delete-brand/{id}', [BrandController::class, 'delete'])->name('brand.delete');
+    // Route::post('/delete-brand', [BrandController::class, 'delete'])->name('brand.delete');
+    Route::post('/delete-brand', [BrandController::class, 'delete'])->name('brand.delete');
 
     Route::get('/add-unit', [UnitController::class, 'index'])->name('unit.add');
     Route::post('/create-unit', [UnitController::class, 'create'])->name('unit.create');
