@@ -189,7 +189,15 @@
                     </li>
 
 
-
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="bx bx-store"></i>
+                            <span>Contact Module</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="{{route('contact.add')}}">Manage Contact</a></li>
+                        </ul>
+                    </li>
 
 
                     <li>
@@ -375,6 +383,6 @@
 
 </body>
 @stack('js')
-
+@stack('costomcss')
 
 </html>

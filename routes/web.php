@@ -13,6 +13,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\CustomerDashboardController;
 use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\ContactController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,10 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
     Route::get('/edit-unit/{id}', [UnitController::class, 'edit'])->name('unit.edit');
     Route::post('/update-unit/{id}', [UnitController::class, 'update'])->name('unit.update');
     Route::get('/delete-unit/{id}', [UnitController::class, 'delete'])->name('unit.delete');
+
+    Route::get('/add-contact', [ContactController::class, 'index'])->name('contact.add');
+    Route::post('/create-contact', [ContactController::class, 'create'])->name('contact.create');
+
 
 
 });
