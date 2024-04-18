@@ -70,6 +70,9 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
     Route::get('/add-contact', [ContactController::class, 'index'])->name('contact.add');
     Route::post('/create-contact', [ContactController::class, 'create'])->name('contact.create');
+    Route::get('/edit-contact/{id}', [ContactController::class, 'edit'])->name('contact.edit');
+    Route::post('/update-contact/{id}', [ContactController::class, 'update'])->name('contact.update');
+
 
 
 

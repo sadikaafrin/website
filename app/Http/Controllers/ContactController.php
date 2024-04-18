@@ -45,4 +45,39 @@ class ContactController extends Controller
            'status' => 'success',
         ]);
     }
+    public function edit($id)
+    {
+       $contact = Contact::findOrFail($id);
+       return response()->json($contact);
+    }
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'email' => ['nullable'],
+            'phone' => ['nullable'],
+            'address' => ['nullable'],
+            'google_map' => ["nullable"],
+            'facebook' => ['nullable'],
+            'instagram' => ['nullable'],
+            'linkedin' => ['nullable'],
+            'twitter' => ['nullable'],
+            'youtube' => ['nullable'],
+        ]);
+
+        $contact = Contact::findOrFail($id);
+        $contact->email = $request->email;
+        $contact->phone = $request->phone;
+        $contact->address = $request->address;
+        $contact->google_map = $request->google_map;
+        $contact->facebook = $request->facebook;
+        $contact->instagram = $request->instagram;
+        $contact->linkedin = $request->linkedin;
+        $contact->twitter = $request->twitter;
+        $contact->youtube = $request->youtube;
+        $contact->save();
+    
+        return response()->json([
+           'status' => 'success',
+        ]);
+    }
 }
