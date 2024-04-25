@@ -1,0 +1,46 @@
+<style>
+       @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+       *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Nanum Gothic", sans-serif;
+       }
+
+       .contact{
+            position: relative;
+            min-height:100vh;
+            padding:50px 100px;
+            display: flex;
+            justify-content: center;
+            align-items:center;
+            flex-direction: column;
+            background: rgb(79, 77, 77);
+       }
+
+       .contact .contact{
+            max-width: 800px;
+            text-align:center;
+       }
+       .contact .contact h2{
+            font-size:3rem;
+            color: #fff;
+            font-weight:500;
+       }
+       .contact .contact p
+       {
+            color: #fff;
+            font-size:1.1em;
+            font-weight: 300;
+       }
+       .container2{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 50px;
+        height: 50px;
+        background: red;
+        margin-top: 30px;
+       }
+    </style>

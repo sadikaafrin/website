@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Category;
+use App\Models\Contact;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,8 @@ class EcommerceController extends Controller
     public function index()
     {
 
-        return view('front.home.home');
+        $contacts = Contact::all();
+        return view('front.home.home', compact('contacts'));
     }
 
 }
